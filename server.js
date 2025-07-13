@@ -10,12 +10,19 @@ server.on('connection', (socket) => {
     clientList.push(socket);
     
     socket.on('message', (message) => {
-        console.log("Received:", message.toString());
-        clientList.forEach((client, index)=>
+        const msg = JSON.parse(message.toString())
+
+        if(msg.type == 'message')
+        {
+            console.log("Received:", msg.text);
+            clientList.forEach((client, index)=>
             {
-                console.log(`"${message.toString()}" was sent to client ${index}`);
-                client.send(message.toString());
+                client.send(`${msg.user}: ${msg.text}`);
+                console.log(`"${msg.text}" was sent to client ${index}`);
             });
+        }
+        
+        
     });
 
     socket.on('close', () => {

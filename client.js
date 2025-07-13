@@ -1,5 +1,6 @@
 
 const socket = new WebSocket('ws://localhost:8080');
+let username = "";
 
 // when connection successful
 socket.addEventListener("open", (event) => {
@@ -35,10 +36,22 @@ function sendMessage(msg)
 
 
 
+function onUsernameChanged()
+{
+    username = document.getElementById("username").value;
+}
 
 function submitChatMsg()
 {
-    const text = document.getElementById("msgBox").value;
+
+    const msg = {
+        type: "message",
+        text: document.getElementById("msgBox").value,
+        user: username,
+        date: Date.now()
+    }
+    sendMessage(JSON.stringify(msg));
+
+    // reset form input
     document.getElementById("msgBox").value = "";
-    sendMessage(text);
 }
