@@ -1,12 +1,9 @@
 
 const socket = new WebSocket('ws://localhost:8080');
 
-if (socket.readyState === WebSocket.OPEN) {
 // when connection successful
 socket.addEventListener("open", (event) => {
     console.log("WebSocket connection successfully established!")
-
-    socket.send("Hello server!")
 });
 
 // when message received successful
@@ -23,7 +20,6 @@ socket.addEventListener("close", (event) => {
 socket.addEventListener("error", (error) => {
     console.log("Error:", error);
 });
-}
 
 function sendMessage(msg)
 {
