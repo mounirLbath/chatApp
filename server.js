@@ -20,13 +20,9 @@ console.log("Database connection established");
 let saveNewMessage = async function(msg)
 {   
     try
-    {
-        // convert to timestamp
-        const timestampInSeconds = Math.floor(msg.msg_time / 1000);
-        const sqlTimestamp = new Date(timestampInSeconds * 1000).toISOString().slice(0, 19).replace('T', ' ');
-        
+    {        
         // insert message in database
-        await connection.query(`INSERT INTO messages (username, content, msg_time) VALUES ('${msg.username}', '${msg.text}', '${sqlTimestamp}')`);
+        await connection.query(`INSERT INTO messages (username, content, msg_time) VALUES ('${msg.username}', '${msg.content}', '${msg.time}')`);
         
         console.log("Successfully saved message in database." + err);
 
@@ -65,7 +61,7 @@ server.on('connection', (socket) => {
             {
                 if(index != currIndex)
                 {
-                    client.send(`${msg.username}: ${msg.text}`);
+                    client.send(message.toString());
                 }
             });
         }

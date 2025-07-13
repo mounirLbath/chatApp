@@ -1,6 +1,11 @@
 
 const socket = new WebSocket('ws://localhost:8080');
+
+
+// username set by user 
 let username = "";
+
+// add event listeners for websocket connection
 
 // when connection successful
 socket.addEventListener("open", (event) => {
@@ -9,6 +14,8 @@ socket.addEventListener("open", (event) => {
 
 // when message received successful
 socket.addEventListener("message", (event) => {
+    const msg = JSON.parse(event.data);
+    displayMessage(msg);
     console.log("Message received from server:", event.data);
 });
 
@@ -25,6 +32,7 @@ socket.addEventListener("error", (error) => {
 function sendMessage(msg)
 {
     if (socket.readyState === WebSocket.OPEN) {
+        
         socket.send(msg);
         console.log(`"${msg}" was sent to the server successfully!`);
     }
@@ -35,23 +43,38 @@ function sendMessage(msg)
 }
 
 
+// Utilities
 
+
+// when username is changed
 function onUsernameChanged()
 {
     username = document.getElementById("username").value;
 }
 
+// send a new chat message
 function submitChatMsg()
 {
+    // convert to timestamp
+    const timestampInSeconds = Math.floor(Date.now() / 1000);
+    const timestamp = new Date(timestampInSeconds * 1000).toISOString().slice(0, 19).replace('T', ' ');
 
     const msg = {
         type: "message",
-        text: document.getElementById("msgBox").value,
+        content: document.getElementById("msgBox").value,
         username: username,
-        msg_time: Date.now()
-    }
+        time: timestamp
+    };
     sendMessage(JSON.stringify(msg));
+    displayMessage(msg); 
 
     // reset form input
     document.getElementById("msgBox").value = "";
+}
+
+// when a message is received
+
+function displayMessage(msg)
+{
+    document.getElementById("messages").innerHTML += `<p><b>${msg.username}</b> - (<i>${msg.time}</i>): ${msg.content}</p>`;
 }
