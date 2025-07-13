@@ -6,15 +6,16 @@ const server = new WebSocket.Server({port: PORT});
 
 
 server.on('connection', (socket) => {
-    console.log("Client connected!")
-
+    console.log("Client connected!");
+    socket.send("hello client!");
+    
     socket.on('message', (message) => {
-        console.log("Received:", message);
+        console.log("Received:", message.toString());
     });
 
 
     socket.on('close', () => {
-        console.log("Client disconnected")
+        console.log("Client disconnected");
     });
 });
 
