@@ -47,8 +47,8 @@ function submitChatMsg()
     const msg = {
         type: "message",
         text: document.getElementById("msgBox").value,
-        user: username,
-        date: Date.now()
+        username: username,
+        msg_time: Date.now()
     }
     sendMessage(JSON.stringify(msg));
 
