@@ -153,7 +153,7 @@ function displayOldMessages(msgList)
             displayMessage(element, false);
         });
     }
-    else
+    else //no more messages to display
     {
         displayNoMoreMsg();
     }
