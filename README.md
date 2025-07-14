@@ -5,6 +5,8 @@ This is an instant chat app. It uses:
 -MySQL to handle message saving
 -HTML and JS for frontend
 
+<img width="1920" height="1080" alt="Screenshot from 2025-07-14 23-21-54" src="https://github.com/user-attachments/assets/f6ab34ae-9803-4eb2-8e28-05fa4dee4f72" />
+
 ## Server
 Server files are in the folder /server
 
@@ -21,3 +23,4 @@ Client files are in the folder /client
 2) Just run index.html on a localhost (for instance create one with `python -m http.server`)
 
 Have fun !
+
