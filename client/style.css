@@ -80,3 +80,7 @@ button:hover{
 #msgBox {
     flex: 1; 
 }
+
+#noMsg{
+    display: none;
+}

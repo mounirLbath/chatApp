@@ -12,6 +12,9 @@ let nb_msg_loaded = 0;
 // when connection successful
 socket.addEventListener("open", (event) => {
     console.log("WebSocket connection successfully established!")
+    
+    // hide "not connected" message
+    dispNotConnected(false);
 
     // load first 10
     loadMoreMsg(10);
@@ -36,6 +39,8 @@ socket.addEventListener("message", (event) => {
 // when connection closed
 socket.addEventListener("close", (event) => {
     console.log("Connection closed!")
+    // display "not connected" message
+    dispNotConnected(true);
 });
 
 // when error occurs
@@ -135,19 +140,12 @@ function displayMessage(msg, isNew = true)
     {
         container.prepend(p); //old messages appear at the top
     }
+
+    dispNoMsg(false); // a new message has appeared, hide "no message left" 
     nb_msg_loaded++;
 }
 
-// no more messages to load
-function displayNoMoreMsg()
-{
-    const container = document.getElementById("messages");
-    const p = document.createElement("p");
-    const text = document.createTextNode("No messages left :)");
-    p.appendChild(text);
 
-    container.prepend(p);
-}
 
 // when older messages are received
 function displayOldMessages(msgList)
@@ -160,7 +158,7 @@ function displayOldMessages(msgList)
     }
     else //no more messages to display
     {
-        displayNoMoreMsg();
+        dispNoMsg(true);
     }
     
 }
@@ -171,4 +169,30 @@ function scrollBottom()
 
     const messagesContainer = document.getElementById("msgDiv");
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// display or hide "not connected" message
+function dispNotConnected(unhide)
+{
+    try
+    {
+        document.getElementById("notConn").style.display = unhide? "block" : "none";
+    }
+    catch(err)
+    {
+        console.log("An error occured while toggling 'not connected' message ", err);
+    }
+}
+
+// display or hide "no message left" message
+function dispNoMsg(unhide)
+{
+    try
+    {
+        document.getElementById("noMsg").style.display = unhide? "block" : "none";
+    }
+    catch(err)
+    {
+        console.log("An error occured while toggling 'no message left' message ", err);
+    }
 }
