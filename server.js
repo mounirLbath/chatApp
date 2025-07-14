@@ -17,6 +17,8 @@ const connection = await mysql.createConnection({
 
 console.log("Database connection established");
 
+
+// save messages to db
 let saveNewMessage = async function(msg)
 {   
     try
@@ -25,8 +27,6 @@ let saveNewMessage = async function(msg)
         const query = "INSERT INTO messages (username, content, msg_time) VALUES (?, ?, ?)";
 
         // insert message in database
-        //await connection.query(`INSERT INTO messages (username, content, msg_time) VALUES ('${msg.username}', '${msg.content}', '${msg.time}')`);
-        
         await connection.execute(query, [msg.username, msg.content, msg.time]);
         
         console.log("Successfully saved message in database.");
@@ -37,6 +37,28 @@ let saveNewMessage = async function(msg)
         console.log("An error occured while saving the message to the database: " + err);
     }
 };
+
+// returns messages to load if successfull, undefined otherwise
+let loadMoreMsg = async function(msg) 
+{
+    try
+    {    
+        // convert to string
+        const limit = msg.limit.toString();
+        const offset = msg.offset.toString();
+        
+        // load "limit" last messages before the last "offset" messages
+        const query = "SELECT * FROM messages ORDER BY msg_id DESC LIMIT ? OFFSET ?";
+        let [rows] = await connection.execute(query, [limit, offset]);
+
+        console.log("Successfully loaded messages from database.");
+        return rows;
+    }
+    catch(err)
+    {
+        console.log("An error occured while loading messages from database. " + err);
+    }
+}
 
 // create web socket server
 const PORT = 8080 
@@ -51,7 +73,7 @@ server.on('connection', (socket) => {
     clientList.push(socket);
     const currIndex = clientList.length-1;
     
-    socket.on('message', (message) => {
+    socket.on('message', async (message) => {
         const msg = JSON.parse(message.toString())
         if(msg.type == 'message')
         {
@@ -68,6 +90,15 @@ server.on('connection', (socket) => {
                     client.send(message.toString());
                 }
             });
+        }
+        else if(msg.type == 'load-msg')
+        {
+            console.log(`Loading ${msg.number} more messages for client ${currIndex} (already ${msg.nb_msg_loaded} loaded)`);
+
+            // load more messages
+            let a = await loadMoreMsg(msg);
+
+            
         }
         
         

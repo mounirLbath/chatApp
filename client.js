@@ -1,6 +1,12 @@
 
 const socket = new WebSocket('ws://localhost:8080');
 
+let nb_msg_loaded = 0;
+
+
+
+/************************ SERVICES *************************************** */
+
 // add event listeners for websocket connection
 
 // when connection successful
@@ -11,8 +17,16 @@ socket.addEventListener("open", (event) => {
 // when message received successful
 socket.addEventListener("message", (event) => {
     const msg = JSON.parse(event.data);
-    displayMessage(msg);
-    console.log("Message received from server:", event.data);
+
+    if(msg.type == "message")
+    {
+        displayMessage(msg);
+        console.log("Message received from server:", event.data);
+    }
+    else if(msg.type == "load-msg")
+    {
+
+    }
 });
 
 // when connection closed
@@ -39,8 +53,6 @@ function sendMessage(msg)
 }
 
 
-// Utilities
-
 // send a new chat message
 function submitChatMsg()
 {
@@ -61,6 +73,21 @@ function submitChatMsg()
     document.getElementById("msgBox").value = "";
 }
 
+//load more messages
+function loadMoreMsg()
+{
+    const msg = {
+        type: "load-msg",
+        limit: 5, //nb messages to load
+        offset: nb_msg_loaded //nb messages already loaded
+    };
+    sendMessage(JSON.stringify(msg));
+}
+
+
+/********************** VIEW ********************** */
+
+
 // strip html tags from str
 function escapeHTML(str) {
   return String(str)
@@ -76,4 +103,5 @@ function escapeHTML(str) {
 function displayMessage(msg)
 {
     document.getElementById("messages").innerHTML += `<p><b>${escapeHTML(msg.username)}</b> - (<i>${escapeHTML(msg.time)}</i>): ${escapeHTML(msg.content)}</p>`;
+    nb_msg_loaded++;
 }
