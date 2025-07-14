@@ -20,11 +20,16 @@ console.log("Database connection established");
 let saveNewMessage = async function(msg)
 {   
     try
-    {        
-        // insert message in database
-        await connection.query(`INSERT INTO messages (username, content, msg_time) VALUES ('${msg.username}', '${msg.content}', '${msg.time}')`);
+    {    
         
-        console.log("Successfully saved message in database." + err);
+        const query = "INSERT INTO messages (username, content, msg_time) VALUES (?, ?, ?)";
+
+        // insert message in database
+        //await connection.query(`INSERT INTO messages (username, content, msg_time) VALUES ('${msg.username}', '${msg.content}', '${msg.time}')`);
+        
+        await connection.execute(query, [msg.username, msg.content, msg.time]);
+        
+        console.log("Successfully saved message in database.");
 
     }
     catch(err)
@@ -48,10 +53,9 @@ server.on('connection', (socket) => {
     
     socket.on('message', (message) => {
         const msg = JSON.parse(message.toString())
-
         if(msg.type == 'message')
         {
-            console.log(`Received message from ${msg.username}: ${msg.text}` );
+            console.log(`Received message from ${msg.username}: ${msg.content}` );
 
             // save message to database (async)
             saveNewMessage(msg);

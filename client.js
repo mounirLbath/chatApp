@@ -72,9 +72,19 @@ function submitChatMsg()
     document.getElementById("msgBox").value = "";
 }
 
-// when a message is received
+// strip html tags from str
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
+
+// when a message is received
 function displayMessage(msg)
 {
-    document.getElementById("messages").innerHTML += `<p><b>${msg.username}</b> - (<i>${msg.time}</i>): ${msg.content}</p>`;
+    document.getElementById("messages").innerHTML += `<p><b>${escapeHTML(msg.username)}</b> - (<i>${escapeHTML(msg.time)}</i>): ${escapeHTML(msg.content)}</p>`;
 }
