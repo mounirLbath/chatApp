@@ -12,6 +12,9 @@ let nb_msg_loaded = 0;
 // when connection successful
 socket.addEventListener("open", (event) => {
     console.log("WebSocket connection successfully established!")
+
+    // load first 10
+    loadMoreMsg(10);
 });
 
 // when message received successful
@@ -75,11 +78,11 @@ function submitChatMsg()
 }
 
 //load more messages
-function loadMoreMsg()
+function loadMoreMsg(nb = 5)
 {
     const msg = {
         type: "load-msg",
-        limit: 5, //nb messages to load
+        limit: nb, //nb messages to load
         offset: nb_msg_loaded //nb messages already loaded
     };
     sendMessage(JSON.stringify(msg));
@@ -124,7 +127,9 @@ function displayMessage(msg, isNew = true)
 
     if(isNew)
     {
-        container.append(p) //old messages appear at the bottom
+        container.append(p) //new messages appear at the bottom
+        
+        scrollBottom(); // scroll back to bottom
     }
     else
     {
@@ -138,7 +143,7 @@ function displayNoMoreMsg()
 {
     const container = document.getElementById("messages");
     const p = document.createElement("p");
-    const text = document.createTextNode("No more messages :)");
+    const text = document.createTextNode("No messages left :)");
     p.appendChild(text);
 
     container.prepend(p);
@@ -158,4 +163,12 @@ function displayOldMessages(msgList)
         displayNoMoreMsg();
     }
     
+}
+
+// scroll to bottom
+function scrollBottom()
+{
+
+    const messagesContainer = document.getElementById("msgDiv");
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }

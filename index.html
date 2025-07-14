@@ -5,20 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat App</title>
     <script src="client.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <p>Username:</p> 
-    <input type="text" id="username">
-
+    <div id="username-field">
+        <h1>Instant Chat App</h1>
+        <div>
+            <p>Username:</p> 
+            <input type="text" id="username" placeholder="Write your username here">
+        </div>
+    </div>
+    
+    <div id="msgDiv">
+        <button onclick="loadMoreMsg();">Load more messages</button>
+        <div id="messages" >
+        </div>
+    </div>
     <p>Message:</p> 
-    <form onsubmit="submitChatMsg(); return false;">
-        <input type="text" id="msgBox">
+    <form id="msgForm" onsubmit="submitChatMsg(); return false;">
+        <input type="text" id="msgBox" placeholder="Write your message here" autocomplete="off">
         <button>Send</button>
     </form>
-    <br>
-    <button onclick="loadMoreMsg();">Load more messages</button>
-    <div id="messages">
-    </div>
 </body>
 </html>

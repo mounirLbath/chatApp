@@ -1,0 +1,82 @@
+
+
+html{
+    background-color: rgb(37, 37, 37);
+    color: white;
+    font-family: sans-serif;
+    height: 100%;
+}
+
+input{
+    background-color: rgb(88, 88, 88);
+    font-size: large;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    color: white;
+}
+
+body{
+    margin: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+p{
+    margin: 10px 8px;
+}
+
+input{
+    margin: 0px 0px;
+}
+
+button {
+    background-color: rgb(73, 73, 73);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: rgb(58, 58, 58);
+}
+
+#msgDiv{
+    flex: 1;
+    background-color:  rgb(73, 73, 73);
+    overflow: scroll;
+    padding: 8px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+#messages p {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+#msgForm {
+    display: flex;
+    gap: 8px; 
+    margin: 10px 8px;
+    margin-bottom: 30px;
+}
+
+#username-field{
+    margin: 10px 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#msgBox {
+    flex: 1; 
+}
