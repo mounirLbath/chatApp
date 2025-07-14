@@ -25,7 +25,8 @@ socket.addEventListener("message", (event) => {
     }
     else if(msg.type == "load-msg")
     {
-
+        displayOldMessages(msg.rows);
+        console.log("Old messages loaded:", event.data)
     }
 });
 
@@ -64,7 +65,7 @@ function submitChatMsg()
         type: "message",
         content: document.getElementById("msgBox").value,
         username: document.getElementById("username").value,
-        time: timestamp
+        msg_time: timestamp
     };
     sendMessage(JSON.stringify(msg));
     displayMessage(msg); 
@@ -100,8 +101,61 @@ function escapeHTML(str) {
 
 
 // when a message is received
-function displayMessage(msg)
+function displayMessage(msg, isNew = true)
 {
-    document.getElementById("messages").innerHTML += `<p><b>${escapeHTML(msg.username)}</b> - (<i>${escapeHTML(msg.time)}</i>): ${escapeHTML(msg.content)}</p>`;
+    const container = document.getElementById("messages");
+    const p = document.createElement("p");
+
+    const bold = document.createElement("b");
+    bold.textContent = msg.username;
+
+    const italic = document.createElement("i");
+    const msg_time = new Date(msg.msg_time);
+    const displayTime = msg_time.toLocaleString();
+    italic.textContent = displayTime;
+
+    const text = document.createTextNode(` - (`);
+    const closing = document.createTextNode(`): ${msg.content}`);
+
+    p.appendChild(bold);
+    p.appendChild(text);
+    p.appendChild(italic);
+    p.appendChild(closing);
+
+    if(isNew)
+    {
+        container.append(p) //old messages appear at the bottom
+    }
+    else
+    {
+        container.prepend(p); //old messages appear at the top
+    }
     nb_msg_loaded++;
+}
+
+// no more messages to load
+function displayNoMoreMsg()
+{
+    const container = document.getElementById("messages");
+    const p = document.createElement("p");
+    const text = document.createTextNode("No more messages :)");
+    p.appendChild(text);
+
+    container.prepend(p);
+}
+
+// when older messages are received
+function displayOldMessages(msgList)
+{
+    if(msgList.length > 0)
+    {
+        msgList.forEach(element => {
+            displayMessage(element, false);
+        });
+    }
+    else
+    {
+        displayNoMoreMsg();
+    }
+    
 }

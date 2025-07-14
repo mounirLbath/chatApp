@@ -27,7 +27,7 @@ let saveNewMessage = async function(msg)
         const query = "INSERT INTO messages (username, content, msg_time) VALUES (?, ?, ?)";
 
         // insert message in database
-        await connection.execute(query, [msg.username, msg.content, msg.time]);
+        await connection.execute(query, [msg.username, msg.content, msg.msg_time]);
         
         console.log("Successfully saved message in database.");
 
@@ -96,9 +96,15 @@ server.on('connection', (socket) => {
             console.log(`Loading ${msg.number} more messages for client ${currIndex} (already ${msg.nb_msg_loaded} loaded)`);
 
             // load more messages
-            let a = await loadMoreMsg(msg);
+            const rows = await loadMoreMsg(msg);
 
-            
+            // send the response to the client
+            const response = {
+                type : "load-msg",
+                rows : rows
+            };
+            const responseJson = JSON.stringify(response);
+            socket.send(responseJson);
         }
         
         
