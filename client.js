@@ -1,10 +1,6 @@
 
 const socket = new WebSocket('ws://localhost:8080');
 
-
-// username set by user 
-let username = "";
-
 // add event listeners for websocket connection
 
 // when connection successful
@@ -45,13 +41,6 @@ function sendMessage(msg)
 
 // Utilities
 
-
-// when username is changed
-function onUsernameChanged()
-{
-    username = document.getElementById("username").value;
-}
-
 // send a new chat message
 function submitChatMsg()
 {
@@ -62,7 +51,7 @@ function submitChatMsg()
     const msg = {
         type: "message",
         content: document.getElementById("msgBox").value,
-        username: username,
+        username: document.getElementById("username").value,
         time: timestamp
     };
     sendMessage(JSON.stringify(msg));
